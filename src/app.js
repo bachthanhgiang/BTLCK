@@ -111,7 +111,7 @@ async function prompt() {
       }
     }
 
-    prompt(); // Lặp lại để chờ lệnh tiếp theo
+    prompt(); 
   });
 }
 

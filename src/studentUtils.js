@@ -1,10 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-// Đường dẫn file dữ liệu
 const filename = path.join(__dirname, '../data/dataStudent.json');
 
-// Đọc dữ liệu sinh viên (Async)
 async function readStudents() {
   try {
     const data = await fs.promises.readFile(filename, 'utf-8');
@@ -15,7 +13,6 @@ async function readStudents() {
   }
 }
 
-// Lưu dữ liệu sinh viên (Async)
 async function saveStudents(students) {
   try {
     await fs.promises.writeFile(filename, JSON.stringify(students, null, 2), 'utf-8');
@@ -25,17 +22,15 @@ async function saveStudents(students) {
   }
 }
 
-// Tìm sinh viên theo MSSV (Sử dụng tìm kiếm tuyến tính)
 function findStudent(mssv) {
   return readStudents().then((students) => {
     for (let student of students) {
       if (student.id === mssv) return student;
     }
-    return null; // Trả về null nếu không tìm thấy sinh viên
+    return null; 
   });
 }
 
-// Thay đổi CPA của sinh viên
 async function modifyCpa(mssv, newCpa) {
   const students = await readStudents();
   const student = students.find((s) => s.id === mssv);
@@ -47,7 +42,6 @@ async function modifyCpa(mssv, newCpa) {
   return null;
 }
 
-// Sắp xếp sinh viên theo CPA (Bubble Sort)
 function bubbleSort(students, compareFn) {
   const len = students.length;
   for (let i = 0; i < len; i++) {
@@ -59,21 +53,18 @@ function bubbleSort(students, compareFn) {
   }
 }
 
-// Tìm n sinh viên có CPA cao nhất
 async function findTop(n) {
   const students = await readStudents();
   bubbleSort(students, (a, b) => a.cpa < b.cpa);
   return students.slice(0, n);
 }
 
-// Tìm n sinh viên có CPA thấp nhất
 async function findBottom(n) {
   const students = await readStudents();
   bubbleSort(students, (a, b) => a.cpa > b.cpa);
   return students.slice(0, n);
 }
 
-// Tìm sinh viên bị cảnh cáo
 async function findCanhCao() {
   const students = await readStudents();
   return students.filter((student) => {
@@ -85,13 +76,11 @@ async function findCanhCao() {
   });
 }
 
-// Đếm số sinh viên có CPA trong khoảng [a, b]
 async function countInRange(a, b) {
   const students = await readStudents();
   return students.filter((s) => s.cpa >= a && s.cpa <= b).length;
 }
 
-// Tìm sinh viên bị đình chỉ
 async function suspendedStudents(currentMonthYear) {
   const students = await readStudents();
   const [month, year] = currentMonthYear.split('/').map(Number);
