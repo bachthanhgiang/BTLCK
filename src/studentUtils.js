@@ -87,7 +87,7 @@ async function suspendedStudents(currentMonthYear) {
   const currentTime = year + month / 12;
 
   return students.filter((student) => {
-    const entryYear = 2000 + parseInt(student.id.slice(0, 2), 10);
+    const entryYear = parseInt(student.id.slice(0, 4), 10);
     const studyDuration = currentTime - entryYear;
     const canhCao = student.cpa <= 0.5 ? 3 : student.cpa <= 1.0 ? 2 : student.cpa <= 1.5 ? 1 : 0;
 
