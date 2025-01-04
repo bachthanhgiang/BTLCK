@@ -85,15 +85,33 @@ async function suspendedStudents(currentMonthYear) {
   const students = await readStudents();
   const [month, year] = currentMonthYear.split('/').map(Number);
   const currentTime = year + month / 12;
+  
+  const studentsByEntryYear = new Map();
 
-  return students.filter((student) => {
+  students.forEach((student) => {
     const entryYear = parseInt(student.id.slice(0, 4), 10);
-    const studyDuration = currentTime - entryYear;
-    const canhCao = student.cpa <= 0.5 ? 3 : student.cpa <= 1.0 ? 2 : student.cpa <= 1.5 ? 1 : 0;
+    if (!studentsByEntryYear.has(entryYear)) {
+      studentsByEntryYear.set(entryYear, []);
+    }
+    studentsByEntryYear.get(entryYear).push(student);
+  });
 
-    return canhCao === 3 && studyDuration > 5;
-  }).length;
+  let suspendedCount = 0;
+  studentsByEntryYear.forEach((studentList) => {
+    studentList.forEach((student) => {
+      const entryYear = parseInt(student.id.slice(0, 4), 10);
+      const studyDuration = currentTime - entryYear;
+      const canhCao = student.cpa <= 0.5 ? 3 : student.cpa <= 1.0 ? 2 : student.cpa <= 1.5 ? 1 : 0;
+
+      if (canhCao === 3 && studyDuration > 5) {
+        suspendedCount++;
+      }
+    });
+  });
+
+  return suspendedCount;
 }
+
 
 module.exports = {
   readStudents,
