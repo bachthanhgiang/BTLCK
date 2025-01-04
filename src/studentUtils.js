@@ -32,14 +32,14 @@ function findStudent(mssv) {
 }
 
 function binarySearch(students, mssv) {
-  let left = 0;
+  let left = 0; 
   let right = students.length - 1;
   while (left <= right) {
-    const mid = Math.floor((left + right) / 2);
-    if (students[mid].id === mssv) {
+    const mid = Math.floor((left + right) / 2); 
+    if (students[mid].id === mssv) {  
       return students[mid];
     } else if (students[mid].id < mssv) {
-      left = mid + 1;
+      left = mid + 1; 
     } else {
       right = mid - 1;
     }
