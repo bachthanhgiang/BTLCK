@@ -78,7 +78,26 @@ async function findCanhCao() {
 
 async function countInRange(a, b) {
   const students = await readStudents();
-  return students.filter((s) => s.cpa >= a && s.cpa <= b).length;
+
+  students.sort((s1, s2) => s1.cpa - s2.cpa);
+
+  const low = binarySearch(students, a, true);
+  const high = binarySearch(students, b, false);
+
+  return high - low;
+}
+
+function binarySearch(arr, value, findLower) {
+  let left = 0, right = arr.length;
+  while (left < right) {
+    const mid = Math.floor((left + right) / 2);
+    if (arr[mid].cpa < value || (findLower && arr[mid].cpa === value)) {
+      left = mid + 1;
+    } else {
+      right = mid;
+    }
+  }
+  return left;
 }
 
 async function suspendedStudents(currentMonthYear) {
